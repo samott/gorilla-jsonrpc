@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/rpc/v2"
-	"github.com/gorilla/rpc/v2/json2"
+	"github.com/samott/gorilla-jsonrpc/json2"
 )
 
 type Counter struct {
