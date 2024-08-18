@@ -88,11 +88,23 @@ func NewCodec() *Codec {
 type Codec struct {
 	encSel      rpc.EncoderSelector
 	errorMapper func(error) error
+	aliases     map[string]string
 }
 
 // NewRequest returns a CodecRequest.
 func (c *Codec) NewRequest(r *http.Request) rpc.CodecRequest {
-	return newCodecRequest(r, c.encSel.Select(r), c.errorMapper)
+	request := newCodecRequest(r, c.encSel.Select(r), c.errorMapper)
+
+	if method, ok := c.aliases[request.Method]; ok {
+		request.Method = method
+	}
+
+	return request
+}
+
+// RegisterAlias allows for custom names for methods
+func (c *Codec) RegisterAlias(alias, method string) {
+	c.aliases[alias] = method
 }
 
 // ----------------------------------------------------------------------------
